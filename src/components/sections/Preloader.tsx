@@ -66,9 +66,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
       </div>
 
       <div className="flex items-end justify-between">
-        <span className="font-display text-[18vw] italic leading-none tracking-tight md:text-[12vw]">
-          {site.name}
-        </span>
+        <span className="mono-label uppercase">Portfolio <span className="px-2 text-faint">/</span> Initializing</span>
         <span className="font-mono text-2xl tabular-nums text-accent md:text-4xl">
           {String(count).padStart(3, '0')}
         </span>

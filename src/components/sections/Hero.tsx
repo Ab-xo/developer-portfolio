@@ -2,7 +2,6 @@ import { lazy, Suspense, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import { useIsomorphicLayoutEffect } from '../../hooks/useIsomorphicLayoutEffect'
 import { site } from '../../data/site'
-import { HudGrid } from '../ui/HudGrid'
 import { MagneticButton } from '../ui/MagneticButton'
 import { ScrollIndicator } from '../ui/ScrollIndicator'
 
@@ -19,7 +18,6 @@ const HeroAtmosphere = lazy(() =>
 // right as the preloader clears.
 export function Hero({ ready }: { ready: boolean }) {
   const rootRef = useRef<HTMLElement>(null)
-  const gridRef = useRef<HTMLDivElement>(null)
 
   useIsomorphicLayoutEffect(() => {
     if (!ready) return
@@ -41,17 +39,6 @@ export function Hero({ ready }: { ready: boolean }) {
             '-=0.6',
           )
 
-        // Subtle parallax on the HUD grid as the hero scrolls away.
-        gsap.to(gridRef.current, {
-          yPercent: 18,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: root,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-          },
-        })
       }, root)
 
       return () => ctx.revert()
@@ -64,39 +51,27 @@ export function Hero({ ready }: { ready: boolean }) {
     <section
       ref={rootRef}
       id="top"
-      className="relative flex min-h-dvh flex-col justify-center overflow-hidden px-6 pb-16 pt-28 md:px-10 md:pb-20 md:pt-32"
+      className="relative isolate flex min-h-dvh flex-col justify-center overflow-hidden bg-bg px-6 pb-16 pt-32 md:min-h-[100svh] md:px-10 md:pb-20 md:pt-36"
     >
-      <div ref={gridRef} className="absolute inset-0 -z-10">
-        <HudGrid />
-      </div>
-
       <Suspense fallback={null}>
         <HeroAtmosphere />
       </Suspense>
 
-      {/* Ambient light — one warm source low in the frame, behind the grid */}
-      <div
-        aria-hidden
-        className="aurora left-1/2 top-auto -z-10 h-[38vh] w-[60vw] -translate-x-1/2 bottom-[-10vh]"
-        style={{ background: 'radial-gradient(ellipse, rgba(83,224,194,0.10), transparent 70%)' }}
-      />
-
       {/* Corner HUD readouts */}
-      <div className="pointer-events-none absolute inset-x-6 top-28 z-20 flex justify-between md:inset-x-10">
-        <span className="mono-label uppercase">{site.availability}</span>
-        <span className="mono-label uppercase">
+      <div className="pointer-events-none absolute inset-x-6 top-28 z-20 flex justify-between md:inset-x-10 md:top-32">
+        <div className="hero-readout">
+          <span>{site.availability}</span>
+          <span>{site.fullName}</span>
+        </div>
+        <span className="hero-readout hidden md:block">
           {site.location} · {site.timezone}
         </span>
       </div>
 
-      <div className="mx-auto grid w-full max-w-[1400px] items-center gap-2 md:grid-cols-[1.1fr_0.9fr] lg:gap-2">
-        <div className="relative z-10 order-last md:order-first">
-          <p data-hero-fade className="mono-label mb-5 uppercase text-accent md:mb-8">
-            {site.fullName} <span className="px-2 text-faint">/</span> Addis Ababa, Ethiopia
-          </p>
-
-          <h1 className="max-w-[12ch] font-display text-5xl font-normal leading-[0.98] md:text-6xl lg:text-8xl">
-            {['Full-stack', 'products.', 'Practical AI.'].map((line, i) => (
+      <div className="relative z-10 mx-auto mt-14 grid w-full max-w-[1400px] grid-cols-1 items-end gap-6 md:mt-10 md:grid-cols-[minmax(0,1fr)_260px] lg:mt-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-10">
+        <div className="relative z-10 max-w-3xl">
+          <h1 className="max-w-[12ch] font-display text-[clamp(2.75rem,12vw,4rem)] font-normal leading-[0.98] md:text-[clamp(3.75rem,7vw,6rem)] lg:text-[clamp(5.25rem,7vw,7.5rem)]">
+            {site.heroLines.map((line, i) => (
               <span key={line} className="reveal-mask">
                 <span
                   data-hero-line
@@ -133,18 +108,14 @@ export function Hero({ ready }: { ready: boolean }) {
           </div>
         </div>
 
-        <div data-hero-fade className="relative z-10 mx-auto order-first w-full max-w-[176px] md:order-last md:max-w-[380px] lg:-mr-4 lg:max-w-[560px]">
+        <div className="relative z-10 ml-auto mt-2 w-[112px] sm:w-[144px] md:mb-10 md:mt-0 md:w-full md:max-w-[260px] lg:max-w-[320px]">
           <Suspense fallback={<div className="aspect-square w-full" aria-hidden="true" />}>
             <AvatarScene />
           </Suspense>
-          <div className="absolute bottom-[9%] left-[2%] hidden border-l border-accent pl-3 sm:block">
-            <p className="mono-label uppercase text-text">Build · measure · improve</p>
-            <p className="mt-1 text-xs text-muted">From data to a useful product</p>
-          </div>
         </div>
       </div>
 
-      <ScrollIndicator className="absolute bottom-8 left-1/2 -translate-x-1/2 md:left-auto md:right-10 md:translate-x-0" />
+      <ScrollIndicator className="absolute bottom-8 left-1/2 -translate-x-1/2 md:left-10 md:right-auto md:translate-x-0" />
     </section>
   )
 }

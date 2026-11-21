@@ -3,7 +3,6 @@
 // -----------------------------------------------------------------------------
 
 export const site = {
-  name: 'Abraham',
   fullName: 'Abraham Gebeyehu',
   role: 'Computer Scientist · Full-Stack Software Engineer · AI / ML Engineer',
   location: 'Addis Ababa, ET',
@@ -11,7 +10,7 @@ export const site = {
   email: 'gebeyehuabraham19@gmail.com',
   phone: '+251984876850',
   availability: 'Open to full-time roles and freelance projects',
-  heroLines: ['Full-stack', 'software,', 'built to ship.'],
+  heroLines: ['Full-stack', 'products.', 'Practical AI.'],
   heroStatement: 'I build useful web products end to end, and bring data and AI into the parts of a product where they make a real difference.',
   socials: [
     { label: 'GitHub', href: 'https://github.com/Ab-xo' },
@@ -44,17 +43,6 @@ export const aiFocus = {
     { k: 'Applied ML', v: 'Forecasting, deep learning, computer vision, and model evaluation using Python and PyTorch.' },
     { k: 'AI applications', v: 'Resume analysis, role-focused feedback, retrieval-augmented generation, and LLM integration for focused user workflows.' },
     { k: 'Product surface', v: 'React and Next.js interfaces connected to APIs, databases, and deployed data applications.' },
-  ],
-}
-
-export const experiments = {
-  eyebrow: 'Proposed work',
-  title: 'Ideas worth building next',
-  body: 'These are product concepts, not shipped projects. Each grows from work already represented in my portfolio and targets a practical user need.',
-  items: [
-    { name: 'Siramap Career Workspace', audience: 'Job seekers', description: 'Extend resume-to-role feedback into a private application tracker with tailored resume versions, interview preparation, and clear next steps for each opportunity.' },
-    { name: 'Freelance Project Desk', audience: 'Independent developers', description: 'A lightweight client workspace for intake, project scope, proposals, milestones, approvals, and invoice status, designed to reduce coordination overhead.' },
-    { name: 'RetailPulse Stock Planner', audience: 'Small retailers', description: 'Build on demand forecasting with explainable reorder suggestions, simple sales imports, and inventory alerts for small businesses with limited analytics support.' },
   ],
 }
 

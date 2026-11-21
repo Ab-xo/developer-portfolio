@@ -5,8 +5,6 @@ import { featuredProject } from '../../data/projects'
 import { MagneticButton } from '../ui/MagneticButton'
 import { SectionHeader } from '../ui/SectionHeader'
 
-// Featured case study for the team's Addis Ride forecasting project.
-
 export function FeaturedCase() {
   const rootRef = useRef<HTMLElement>(null)
 
@@ -41,7 +39,7 @@ export function FeaturedCase() {
       ref={rootRef}
       className="relative mx-auto max-w-[1400px] px-6 py-36 md:px-10 md:py-56"
     >
-      <SectionHeader index="FC" eyebrow="Team project · Qiyas AI Hackathon" title={`${p.title} — forecasting demand across Addis Ababa`} />
+      <SectionHeader index="FC" eyebrow="Data · Urban mobility" title={`${p.title} — ride demand across Addis Ababa`} />
 
       <div className="mt-16 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
         {/* Visual */}
@@ -103,7 +101,7 @@ export function FeaturedCase() {
         <div className="flex flex-col justify-center">
           <p className="mono-label uppercase">{p.category}</p>
           <p className="mt-6 text-lead text-text">{p.description}</p>
-          <p className="mt-4 text-muted">{p.outcome} The work was completed with a six-person team; the dataset is synthetic and was supplied for the hackathon.</p>
+          <p className="mt-4 text-muted">{p.outcome}</p>
 
           <dl className="mt-10 grid grid-cols-2 gap-6 border-t border-line pt-8">
             {[
@@ -119,10 +117,13 @@ export function FeaturedCase() {
             ))}
           </dl>
 
-          <div className="mt-10">
-            <MagneticButton href={p.href} variant="outline">
-              View repository
+          <div className="mt-10 flex flex-wrap items-center gap-5">
+            <MagneticButton href={p.demoHref}>
+              Explore live demo
             </MagneticButton>
+            <a href={p.href} target="_blank" rel="noreferrer" className="text-sm text-muted transition-colors hover:text-accent">
+              View source
+            </a>
           </div>
         </div>
       </div>

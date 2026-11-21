@@ -1,4 +1,261 @@
 
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #070b0b;
+  --color-text: #e8f1ef;
+  --color-muted: #9aaba7;
+  --color-faint: #64736f;
+  --color-line: rgba(192, 222, 214, 0.12);
+  --color-line-strong: rgba(192, 222, 214, 0.24);
+  --color-surface: #101716;
+  --color-surface-2: #14201f;
+  --color-accent: #53e0c2;
+  --color-coral: #e6a77a;
+
+  --font-sans: "DM Sans", "Segoe UI", Arial, sans-serif;
+  --font-display: "Space Grotesk", "DM Sans", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  --text-display: clamp(4rem, 11vw, 11rem);
+  --text-display--line-height: 0.9;
+  --text-h1: clamp(2.5rem, 6vw, 5rem);
+  --text-h1--line-height: 1.05;
+  --text-h2: clamp(2rem, 4vw, 3.5rem);
+  --text-h2--line-height: 1.1;
+  --text-h3: clamp(1.5rem, 2.5vw, 2.25rem);
+  --text-h3--line-height: 1.2;
+  --text-lead: clamp(1.125rem, 1.5vw, 1.375rem);
+  --text-lead--line-height: 1.65;
+
+  --shadow-card: 0 24px 80px -36px rgba(0, 0, 0, 0.8);
+}
+
+:root {
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.65;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.film-grain,
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.film-grain {
+  z-index: 100;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+
+.vignette {
+  z-index: 40;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.32) 100%);
+}
+
+.aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(72px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.mono-label {
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  line-height: 1.5;
+}
+
+.hero-readout {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.hero-readout span:last-child {
+  color: var(--color-faint);
+}
+
+.brand-mark-shell {
+  display: inline-flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 0.9rem;
+  background: linear-gradient(145deg, rgba(83, 224, 194, 0.11), rgba(230, 167, 122, 0.035) 75%);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.045), 0 8px 24px -16px rgba(83, 224, 194, 0.4);
+  transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+
+.group:hover .brand-mark-shell {
+  transform: translateY(-1px);
+  border-color: rgba(83, 224, 194, 0.55);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.06), 0 10px 28px -14px rgba(83, 224, 194, 0.55);
+}
+
+.brand-mark {
+  width: 1.8rem;
+  height: 1.45rem;
+  overflow: visible;
+}
+
+.brand-mark path {
+  stroke: url(#brand-mark-gradient);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+  transition: stroke-width 200ms ease;
+}
+
+.group:hover .brand-mark path {
+  stroke-width: 1.9;
+}
+
+.brand-wordmark {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: color 200ms ease;
+}
+
+.group:hover .brand-wordmark {
+  color: var(--color-accent);
+}
+
+.work-card-visual {
+  position: relative;
+  height: clamp(14rem, 30vw, 18rem);
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-line);
+  background: linear-gradient(135deg, var(--color-surface-2), var(--color-bg));
+}
+
+.work-card-screenshot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transition: transform 800ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.work-card:hover .work-card-screenshot {
+  transform: scale(1.015);
+}
+
+.work-card-art {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.work-card-art::before {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(192, 222, 214, 0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(192, 222, 214, 0.055) 1px, transparent 1px);
+  background-size: 2rem 2rem;
+  content: "";
+  mask-image: linear-gradient(135deg, black, transparent 80%);
+}
+
+.work-card-art span {
+  color: rgba(232, 241, 239, 0.08);
+  font-family: var(--font-display);
+  font-size: clamp(8rem, 17vw, 14rem);
+  font-weight: 600;
+  letter-spacing: -0.1em;
+  line-height: 1;
+  transform: translateX(-0.06em);
+  transition: color 500ms ease, transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.work-card:hover .work-card-art span {
+  color: rgba(232, 241, 239, 0.14);
+  transform: translateX(-0.06em) scale(1.04);
+}
+
+.work-card-image-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7, 11, 11, 0.22), transparent 42%, rgba(7, 11, 11, 0.42));
+  pointer-events: none;
+}
+
+.reveal-mask {
+  display: block;
+  overflow: hidden;
+}
+
+.italic-accent {
+  color: var(--color-accent);
+  font-style: italic;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(110deg, var(--color-accent), #c4f5e9 65%, var(--color-coral));
+  background-clip: text;
+  color: transparent;
+  -webkit-background-clip: text;
+}
+
+.accent-border {
+  isolation: isolate;
+  position: relative;
+}
+
+.section-pad {
+  padding-block: clamp(6rem, 12vw, 10rem);
+}
+
+.scroll-pip {
+  background: var(--color-accent);
+  box-shadow: 0 0 14px rgba(83, 224, 194, 0.55);
+}
+
 /* SiraMap concept case study */
 .siramap-case { background: linear-gradient(180deg, transparent, rgba(83, 224, 194, 0.025) 50%, transparent); }
 .siramap-shell { overflow: hidden; border: 1px solid var(--color-line); border-radius: 1.5rem; background: linear-gradient(135deg, rgba(16, 23, 22, 0.94), rgba(7, 11, 11, 0.96)); box-shadow: 0 32px 120px -44px rgba(83, 224, 194, 0.18); }
@@ -9,3 +266,117 @@
 .siramap-pulse { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 0 0 rgba(83, 224, 194, 0.55); animation: siramap-pulse 2s infinite; }
 .siramap-arch-card { border-left: 1px solid var(--color-line-strong); padding-left: 1rem; }
 @keyframes siramap-pulse { 70% { box-shadow: 0 0 0 0.45rem rgba(83, 224, 194, 0); } 100% { box-shadow: 0 0 0 0 rgba(83, 224, 194, 0); } }
+
+.hero-atmosphere {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 68% 32%, rgba(24, 91, 77, 0.26), transparent 48%),
+    radial-gradient(ellipse at 16% 78%, rgba(105, 61, 43, 0.11), transparent 40%),
+    linear-gradient(128deg, #050807 5%, #08110f 52%, #0b1210 100%);
+}
+
+.hero-atmosphere::before,
+.hero-atmosphere::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+}
+
+.hero-atmosphere::before {
+  inset: -18%;
+  background:
+    radial-gradient(ellipse at 28% 58%, rgba(83, 224, 194, 0.13), transparent 36%),
+    radial-gradient(ellipse at 72% 38%, rgba(83, 224, 194, 0.16), transparent 34%),
+    radial-gradient(ellipse at 46% 88%, rgba(230, 167, 122, 0.07), transparent 34%);
+  animation: heroAtmosphereDrift 20s ease-in-out infinite alternate;
+}
+
+.hero-atmosphere::after {
+  background: linear-gradient(90deg, rgba(7, 11, 11, 0.22), transparent 58%, rgba(7, 11, 11, 0.08));
+}
+
+.hero-atmosphere__contours {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+  -webkit-mask-image: radial-gradient(ellipse 28% 26% at 87% 82%, transparent 0 68%, #000 100%);
+  mask-image: radial-gradient(ellipse 28% 26% at 87% 82%, transparent 0 68%, #000 100%);
+}
+
+.hero-atmosphere__ridges path {
+  stroke-width: 1.4;
+  stroke-dasharray: 44 56;
+  animation: heroContourFlow 22s linear infinite;
+}
+
+.hero-atmosphere__ridges path:nth-child(even) {
+  animation-direction: reverse;
+  animation-duration: 28s;
+}
+
+.hero-atmosphere__petals path {
+  stroke-width: 1.6;
+  stroke-dasharray: 36 64;
+  animation: heroContourFlow 18s linear infinite;
+}
+
+.hero-portrait-image {
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at center, #000 94%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at center, #000 94%, transparent 100%);
+}
+
+.hero-atmosphere__bloom {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: heroBloom 18s ease-in-out infinite alternate;
+}
+
+.hero-atmosphere__petals {
+  stroke-width: 1.4;
+  stroke-dasharray: 3 8;
+  transform-box: view-box;
+  transform-origin: 64% 46%;
+  animation: heroPetalDrift 32s ease-in-out infinite alternate;
+}
+
+@keyframes heroAtmosphereDrift {
+  from { transform: translate3d(-1.5%, 1%, 0) scale(1); }
+  to { transform: translate3d(1.5%, -1%, 0) scale(1.06); }
+}
+
+@keyframes heroContourFlow {
+  to { stroke-dashoffset: -100; }
+}
+
+@keyframes heroBloom {
+  from { opacity: 0.7; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes heroPetalDrift {
+  from { opacity: 0.44; transform: rotate(-3deg) scale(0.98); }
+  to { opacity: 0.9; transform: rotate(3deg) scale(1.025); }
+}
+
+@media (max-width: 767px) {
+  .hero-atmosphere__contours {
+    -webkit-mask-image: radial-gradient(ellipse 30% 22% at 87% 86%, transparent 0 68%, #000 100%);
+    mask-image: radial-gradient(ellipse 30% 22% at 87% 86%, transparent 0 68%, #000 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-atmosphere::before,
+  .hero-atmosphere__ridges path,
+  .hero-atmosphere__petals path,
+  .hero-atmosphere__bloom,
+  .hero-atmosphere__petals {
+    animation: none;
+  }
+}
