@@ -22,3 +22,4 @@ dist-ssr
 
 # Kiro/Claude IDE config
 .claude/
+.env
