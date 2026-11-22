@@ -5,8 +5,8 @@ import { site } from '../../data/site'
 import { MagneticButton } from '../ui/MagneticButton'
 import { ScrollIndicator } from '../ui/ScrollIndicator'
 
-const AvatarScene = lazy(() =>
-  import('../ui/AvatarScene').then(({ AvatarScene: Scene }) => ({ default: Scene })),
+const HeroScene = lazy(() =>
+  import('../ui/HeroScene').then(({ HeroScene: Scene }) => ({ default: Scene })),
 )
 const HeroAtmosphere = lazy(() =>
   import('../ui/HeroAtmosphere').then(({ HeroAtmosphere: Atmosphere }) => ({ default: Atmosphere })),
@@ -30,15 +30,13 @@ export function Hero({ ready }: { ready: boolean }) {
       const ctx = gsap.context(() => {
         const lines = gsap.utils.toArray<HTMLElement>('[data-hero-line]')
         gsap.set(lines, { yPercent: 120 })
+        gsap.set('[data-hero-glow]', { autoAlpha: 0, scale: 0.85 })
+        gsap.set('[data-hero-fade]', { autoAlpha: 0, y: 24 })
 
         const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
-        tl.to(lines, { yPercent: 0, duration: 1.2, stagger: 0.12 })
-          .from(
-            '[data-hero-fade]',
-            { y: 24, autoAlpha: 0, duration: 1, stagger: 0.12 },
-            '-=0.6',
-          )
-
+        tl.to('[data-hero-glow]', { autoAlpha: 1, scale: 1, duration: 1.4, ease: 'power2.out' })
+          .to(lines, { yPercent: 0, duration: 1.2, stagger: 0.12 }, '-=0.9')
+          .to('[data-hero-fade]', { autoAlpha: 1, y: 0, duration: 1, stagger: 0.12 }, '-=0.6')
       }, root)
 
       return () => ctx.revert()
@@ -108,9 +106,10 @@ export function Hero({ ready }: { ready: boolean }) {
           </div>
         </div>
 
-        <div className="relative z-10 ml-auto mt-2 w-[112px] sm:w-[144px] md:mb-10 md:mt-0 md:w-full md:max-w-[260px] lg:max-w-[320px]">
+        <div data-hero-glow className="relative z-10 ml-auto mt-2 w-[112px] sm:w-[144px] md:mb-10 md:mt-0 md:w-full md:max-w-[260px] lg:max-w-[320px]">
+          <div className="absolute -inset-8 rounded-full bg-[radial-gradient(ellipse,rgba(83,224,194,0.22),transparent_70%)] blur-2xl" aria-hidden />
           <Suspense fallback={<div className="aspect-square w-full" aria-hidden="true" />}>
-            <AvatarScene />
+            <HeroScene />
           </Suspense>
         </div>
       </div>

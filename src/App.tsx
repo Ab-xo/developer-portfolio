@@ -30,16 +30,18 @@ export function App() {
         gsap.utils
           .toArray<HTMLElement>('main > section:not(:first-child):not(#work), #work article')
           .forEach((element, index) => {
+            const inWork = element.closest('#work')
             gsap.fromTo(
               element,
-              { autoAlpha: 0, y: 28 },
+              { autoAlpha: 0, y: 48, filter: 'blur(8px)' },
               {
                 autoAlpha: 1,
                 y: 0,
-                duration: 0.85,
-                delay: element.closest('#work') ? (index % 2) * 0.1 : 0,
+                filter: 'blur(0px)',
+                duration: 1,
+                delay: inWork ? (index % 2) * 0.12 : 0,
                 ease: 'expo.out',
-                clearProps: 'opacity,visibility,transform',
+                clearProps: 'opacity,visibility,transform,filter',
                 scrollTrigger: {
                   trigger: element,
                   start: 'top 88%',
@@ -48,6 +50,54 @@ export function App() {
               },
             )
           })
+
+        gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+          gsap.fromTo(
+            el,
+            { autoAlpha: 0, y: 32, filter: 'blur(6px)' },
+            {
+              autoAlpha: 1,
+              y: 0,
+              filter: 'blur(0px)',
+              duration: 0.9,
+              ease: 'expo.out',
+              clearProps: 'opacity,visibility,transform,filter',
+              scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+            },
+          )
+        })
+
+        gsap.utils.toArray<HTMLElement>('[data-draw-line]').forEach((line) => {
+          gsap.fromTo(
+            line,
+            { scaleX: 0 },
+            {
+              scaleX: 1,
+              duration: 1.2,
+              ease: 'expo.out',
+              transformOrigin: 'left',
+              scrollTrigger: { trigger: line, start: 'top 90%', once: true },
+            },
+          )
+        })
+
+        gsap.utils.toArray<HTMLElement>('[data-count]').forEach((el) => {
+          const text = el.textContent ?? ''
+          const match = text.match(/[\d.]+/)
+          if (!match) return
+          const target = parseFloat(match[0])
+          const suffix = text.slice(match.index! + match[0].length)
+          const prefix = text.slice(0, match.index)
+          const obj = { v: 0 }
+          gsap.to(obj, {
+            v: target,
+            duration: 1.6,
+            ease: 'power2.out',
+            snap: { v: target % 1 !== 0 ? 0.01 : 1 },
+            onUpdate: () => { el.textContent = prefix + String(obj.v) + suffix },
+            scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+          })
+        })
       })
       return () => context.revert()
     })

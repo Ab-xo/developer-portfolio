@@ -1,4 +1,6 @@
 import { Activity, Boxes, GitBranch, Gauge, ShieldCheck, Workflow } from 'lucide-react'
+import { useRef } from 'react'
+import { useTiltGroup } from '../../hooks/useTilt'
 
 const cards = [
   { icon: Boxes, label: 'Architecture', title: 'Product systems', body: 'UI, APIs, data, and AI features designed as one connected product surface.' },
@@ -7,8 +9,11 @@ const cards = [
 ]
 
 export function EngineeringProof() {
+  const rootRef = useRef<HTMLElement>(null)
+  useTiltGroup(rootRef, 6)
+
   return (
-    <section id="proof" className="relative mx-auto max-w-[1400px] px-6 py-32 md:px-10 md:py-48">
+    <section id="proof" ref={rootRef} className="relative mx-auto max-w-[1400px] px-6 py-32 md:px-10 md:py-48">
       <div className="mb-12 grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
         <div>
           <p className="mono-label mb-4 flex items-center gap-3 text-accent"><Activity size={13} aria-hidden /> Engineering proof</p>
@@ -18,7 +23,7 @@ export function EngineeringProof() {
       </div>
       <div className="grid gap-4 md:grid-cols-3">
         {cards.map(({ icon: Icon, label, title, body }) => (
-          <article key={label} className="accent-border rounded-2xl border border-line bg-surface/60 p-6 transition-transform duration-500 hover:-translate-y-1 md:p-8">
+          <article key={label} data-tilt className="accent-border rounded-2xl border border-line bg-surface/60 p-6 md:p-8">
             <Icon size={19} className="mb-10 text-accent" aria-hidden />
             <p className="mono-label mb-3">{label}</p>
             <h3 className="mb-4 text-h3">{title}</h3>

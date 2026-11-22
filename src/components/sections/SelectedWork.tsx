@@ -1,10 +1,15 @@
 import { ArrowUpRight, Github } from 'lucide-react'
+import { useRef } from 'react'
 import { projects } from '../../data/projects'
 import { HudGrid } from '../ui/HudGrid'
+import { useTiltGroup } from '../../hooks/useTilt'
 
 export function SelectedWork() {
+  const rootRef = useRef<HTMLElement>(null)
+  useTiltGroup(rootRef)
+
   return (
-    <section id="work" className="relative overflow-hidden">
+    <section id="work" ref={rootRef} className="relative overflow-hidden">
       <HudGrid className="opacity-60" />
 
       <div className="mx-auto flex max-w-[1400px] items-end justify-between px-6 pt-24 md:px-10">
@@ -30,7 +35,8 @@ export function SelectedWork() {
         {projects.map((p) => (
           <article
             key={p.id}
-            className="work-card group relative isolate flex min-h-[560px] flex-col overflow-hidden rounded-3xl border border-line bg-surface/75 shadow-[0_24px_70px_-45px_rgba(83,224,194,0.28)] transition-[border-color,transform,box-shadow] duration-500 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_30px_90px_-42px_rgba(83,224,194,0.25)] md:min-h-[590px]"
+            data-tilt
+            className="work-card group relative isolate flex min-h-[560px] flex-col overflow-hidden rounded-3xl border border-line bg-surface/75 shadow-[0_24px_70px_-45px_rgba(83,224,194,0.28)] transition-[border-color,box-shadow] duration-500 hover:border-accent/40 hover:shadow-[0_30px_90px_-42px_rgba(83,224,194,0.25)] md:min-h-[590px]"
           >
             <div className="work-card-visual">
               {p.id === 'addis-ride' ? (

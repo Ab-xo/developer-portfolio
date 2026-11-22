@@ -25,7 +25,8 @@ export function AiEngineering() {
             return (
               <article
                 key={pillar.k}
-                className={`ai-pillar-card group relative isolate flex min-h-[330px] flex-col overflow-hidden rounded-2xl border border-line bg-bg/70 p-6 transition-[border-color,background-color,transform] duration-300 hover:-translate-y-1 hover:border-line-strong hover:bg-surface-2 sm:p-8 lg:min-h-[360px] ${i === 2 ? 'md:col-span-2 md:mx-auto md:w-1/2 lg:col-span-1 lg:mx-0 lg:w-auto' : ''}`}
+                data-reveal
+                className={`ai-pillar-card group relative isolate flex min-h-[330px] flex-col overflow-hidden rounded-2xl border border-line bg-bg/70 p-6 transition-[border-color,background-color] duration-300 hover:border-line-strong hover:bg-surface-2 sm:p-8 lg:min-h-[360px] ${i === 2 ? 'md:col-span-2 md:mx-auto md:w-1/2 lg:col-span-1 lg:mx-0 lg:w-auto' : ''}`}
               >
                 <div className="flex items-start justify-between gap-4">
                   <span className="flex h-12 w-12 items-center justify-center rounded-xl border border-accent/20 bg-accent/5 text-accent">

@@ -30,7 +30,7 @@ export function About() {
 
         <dl className="grid grid-cols-2 gap-px self-start overflow-hidden rounded-sm border border-line bg-line lg:grid-cols-1">
           {about.stats.map((s) => (
-            <div key={s.k} className="bg-bg p-6">
+            <div key={s.k} data-reveal className="bg-bg p-6">
               <dd className="font-display text-[clamp(1.75rem,3vw,2.5rem)] text-accent tabular-nums">
                 {s.v}
               </dd>

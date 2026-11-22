@@ -16,14 +16,15 @@ export function FeaturedCase() {
 
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       const ctx = gsap.context(() => {
-        // Clip-path reveal for the visual.
         gsap.from('[data-case-visual]', {
           clipPath: 'inset(0 0 100% 0)',
-          duration: 1.4,
+          scale: 1.08,
+          filter: 'blur(12px)',
+          duration: 1.6,
           ease: 'expo.out',
+          clearProps: 'clipPath,filter',
           scrollTrigger: { trigger: '[data-case-visual]', start: 'top 80%', once: true },
         })
-
       }, root)
 
       return () => ctx.revert()
@@ -108,8 +109,8 @@ export function FeaturedCase() {
               { value: '8.09', label: 'Held-out validation RMSE' },
               { value: '19%', label: 'Better than seasonal baseline' },
             ].map((m) => (
-              <div key={m.label}>
-                <dd className="font-display text-[clamp(2rem,4vw,3rem)] text-accent tabular-nums">
+              <div key={m.label} data-reveal>
+                <dd className="font-display text-[clamp(2rem,4vw,3rem)] text-accent tabular-nums" data-count>
                   {m.value}
                 </dd>
                 <dt className="mt-2 text-xs text-muted">{m.label}</dt>
