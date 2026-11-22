@@ -108,9 +108,26 @@ export function Hero({ ready }: { ready: boolean }) {
 
         <div data-hero-glow className="relative z-10 ml-auto mt-2 w-[112px] sm:w-[144px] md:mb-10 md:mt-0 md:w-full md:max-w-[260px] lg:max-w-[320px]">
           <div className="absolute -inset-8 rounded-full bg-[radial-gradient(ellipse,rgba(83,224,194,0.22),transparent_70%)] blur-2xl" aria-hidden />
-          <Suspense fallback={<div className="aspect-square w-full" aria-hidden="true" />}>
-            <HeroScene />
-          </Suspense>
+          <div className="absolute -inset-4 z-0" aria-hidden>
+            <Suspense fallback={null}>
+              <HeroScene />
+            </Suspense>
+          </div>
+          <div
+            role="img"
+            aria-label="Portrait of Abraham Gebeyehu"
+            className="relative z-10 aspect-square w-full"
+          >
+            <img
+              src="/avatar.png"
+              alt=""
+              aria-hidden="true"
+              width="700"
+              height="700"
+              fetchPriority="high"
+              className="hero-portrait-image relative h-full w-full object-contain"
+            />
+          </div>
         </div>
       </div>
 

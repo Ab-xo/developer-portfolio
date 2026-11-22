@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
-import { gsap, ScrollTrigger } from '../../lib/gsap'
+import { ScrollTrigger } from '../../lib/gsap'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 
 const NOISE = `
@@ -75,7 +75,7 @@ void main() {
   float fresnel = pow(1.0 - max(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0), 2.0);
   vec3 color = mix(uColorA, uColorB, smoothstep(-1.0, 1.0, vDistort));
   color += fresnel * uColorB * 1.4;
-  float alpha = fresnel * 0.65 + 0.1;
+  float alpha = fresnel * 0.45 + 0.05;
   gl_FragColor = vec4(color, alpha);
 }
 `
@@ -108,7 +108,7 @@ export function HeroScene() {
       fragmentShader: FRAG,
       uniforms: {
         uTime: { value: 0 },
-        uDistort: { value: 0.28 },
+        uDistort: { value: 0.18 },
         uColorA: { value: accent },
         uColorB: { value: coral },
       },
@@ -124,12 +124,12 @@ export function HeroScene() {
       color: accent,
       wireframe: true,
       transparent: true,
-      opacity: 0.07,
+      opacity: 0.05,
     })
     const wireMesh = new THREE.Mesh(geometry, wireMat)
     scene.add(wireMesh)
 
-    const COUNT = 500
+    const COUNT = 350
     const positions = new Float32Array(COUNT * 3)
     for (let i = 0; i < COUNT; i++) {
       const r = 2.5 + Math.random() * 3.5
@@ -143,9 +143,9 @@ export function HeroScene() {
     pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
     const pMat = new THREE.PointsMaterial({
       color: accent,
-      size: 0.035,
+      size: 0.028,
       transparent: true,
-      opacity: 0.5,
+      opacity: 0.35,
       sizeAttenuation: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
@@ -195,7 +195,7 @@ export function HeroScene() {
       }
 
       material.uniforms.uTime.value = t
-      material.uniforms.uDistort.value = 0.28 + scroll * 0.45
+      material.uniforms.uDistort.value = 0.18 + scroll * 0.3
 
       mesh.rotation.y += 0.0025
       wireMesh.rotation.copy(mesh.rotation)
