@@ -8,14 +8,10 @@ import { ScrollIndicator } from '../ui/ScrollIndicator'
 const HeroScene = lazy(() =>
   import('../ui/HeroScene').then(({ HeroScene: Scene }) => ({ default: Scene })),
 )
-const HeroAtmosphere = lazy(() =>
-  import('../ui/HeroAtmosphere').then(({ HeroAtmosphere: Atmosphere }) => ({ default: Atmosphere })),
-)
 
-// Hero: the payoff of the opening timeline. Large display headline reveals
-// line-by-line (masked), supporting copy and CTAs fade up after, and the grid
-// drifts subtly with scroll for depth. `ready` gates the entrance so it starts
-// right as the preloader clears.
+// Hero: full viewport. 3D animated sphere behind the portrait (with a
+// placeholder .glb slot), split-text headline reveal, marquee tagline,
+// and two magnetic buttons. Mouse-parallax tilt on the 3D element.
 export function Hero({ ready }: { ready: boolean }) {
   const rootRef = useRef<HTMLElement>(null)
 
@@ -30,13 +26,13 @@ export function Hero({ ready }: { ready: boolean }) {
       const ctx = gsap.context(() => {
         const lines = gsap.utils.toArray<HTMLElement>('[data-hero-line]')
         gsap.set(lines, { yPercent: 120 })
-        gsap.set('[data-hero-glow]', { autoAlpha: 0, scale: 0.85 })
+        gsap.set('[data-hero-visual]', { autoAlpha: 0, scale: 0.85 })
         gsap.set('[data-hero-fade]', { autoAlpha: 0, y: 24 })
 
         const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
-        tl.to('[data-hero-glow]', { autoAlpha: 1, scale: 1, duration: 1.4, ease: 'power2.out' })
-          .to(lines, { yPercent: 0, duration: 1.2, stagger: 0.12 }, '-=0.9')
-          .to('[data-hero-fade]', { autoAlpha: 1, y: 0, duration: 1, stagger: 0.12 }, '-=0.6')
+        tl.to('[data-hero-visual]', { autoAlpha: 1, scale: 1, duration: 1.4, ease: 'power2.out' })
+          .to(lines, { yPercent: 0, duration: 1.1, stagger: 0.1 }, '-=0.9')
+          .to('[data-hero-fade]', { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.1 }, '-=0.5')
       }, root)
 
       return () => ctx.revert()
@@ -51,9 +47,7 @@ export function Hero({ ready }: { ready: boolean }) {
       id="top"
       className="relative isolate flex min-h-dvh flex-col justify-center overflow-hidden bg-bg px-6 pb-16 pt-32 md:min-h-[100svh] md:px-10 md:pb-20 md:pt-36"
     >
-      <Suspense fallback={null}>
-        <HeroAtmosphere />
-      </Suspense>
+      <div className="hero-atmosphere" aria-hidden />
 
       {/* Corner HUD readouts */}
       <div className="pointer-events-none absolute inset-x-6 top-28 z-20 flex justify-between md:inset-x-10 md:top-32">
@@ -66,9 +60,10 @@ export function Hero({ ready }: { ready: boolean }) {
         </span>
       </div>
 
-      <div className="relative z-10 mx-auto mt-14 grid w-full max-w-[1400px] grid-cols-1 items-end gap-6 md:mt-10 md:grid-cols-[minmax(0,1fr)_260px] lg:mt-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-10">
+      <div className="relative z-10 mx-auto mt-10 grid w-full max-w-[1400px] grid-cols-1 items-center gap-8 md:mt-8 md:grid-cols-[minmax(0,1fr)_300px] lg:mt-10 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-12">
+        {/* Left: headline + CTAs */}
         <div className="relative z-10 max-w-3xl">
-          <h1 className="max-w-[12ch] font-display text-[clamp(2.75rem,12vw,4rem)] font-normal leading-[0.98] md:text-[clamp(3.75rem,7vw,6rem)] lg:text-[clamp(5.25rem,7vw,7.5rem)]">
+          <h1 className="max-w-[12ch] font-display text-[clamp(2.75rem,12vw,4rem)] font-medium leading-[0.98] md:text-[clamp(3.75rem,7vw,6rem)] lg:text-[clamp(5rem,7vw,7.5rem)]">
             {site.heroLines.map((line, i) => (
               <span key={line} className="reveal-mask">
                 <span
@@ -81,38 +76,45 @@ export function Hero({ ready }: { ready: boolean }) {
             ))}
           </h1>
 
+          {/* Marquee tagline */}
+          <div data-hero-fade className="marquee relative mt-6 overflow-hidden border-y border-line py-3 md:mt-8">
+            <div className="marquee-track" style={{ '--marquee-duration': '25s', '--marquee-gap': '3rem' } as React.CSSProperties}>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <span key={i} className="font-mono text-sm uppercase tracking-widest text-muted">
+                  {site.tagline}
+                  <span className="ml-3 text-accent">◆</span>
+                </span>
+              ))}
+            </div>
+          </div>
+
           <p data-hero-fade className="mt-6 max-w-xl text-base text-muted md:mt-8 md:text-lead">
-            {site.heroStatement}
+            {site.oneLiner}
           </p>
 
           <div data-hero-fade className="mt-7 flex flex-wrap items-center gap-3 md:mt-10 md:gap-4">
-            <MagneticButton href="#work">Explore my work</MagneticButton>
-            <MagneticButton href="#contact" variant="outline">
-              Contact me
-            </MagneticButton>
-            <a
-              href="/Abraham_Gebeyehu_CV.pdf"
-              download
-              className="inline-flex min-h-11 items-center px-3 text-sm text-muted underline decoration-line-strong underline-offset-4 transition-colors hover:text-accent"
-            >
+            <MagneticButton href="#work">View Projects</MagneticButton>
+            <MagneticButton href="/Abraham_Gebeyehu_CV.pdf" variant="outline">
               Download CV
-            </a>
+            </MagneticButton>
           </div>
 
-          <div data-hero-fade className="mt-7 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-4 md:mt-12 md:gap-x-8 md:gap-y-3 md:pt-6">
+          <div data-hero-fade className="mt-7 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-4 md:mt-12 md:gap-x-8 md:pt-6">
             <span className="mono-label uppercase">BSc Computer Science</span>
             <span className="mono-label uppercase">CGPA 3.87 / 4.00</span>
             <span className="mono-label uppercase">Freelance since 2022</span>
           </div>
         </div>
 
-        <div data-hero-glow className="relative z-10 ml-auto mt-2 w-[112px] sm:w-[144px] md:mb-10 md:mt-0 md:w-full md:max-w-[260px] lg:max-w-[320px]">
-          <div className="absolute -inset-8 rounded-full bg-[radial-gradient(ellipse,rgba(83,224,194,0.22),transparent_70%)] blur-2xl" aria-hidden />
+        {/* Right: 3D avatar with particle/wireframe sphere */}
+        <div data-hero-visual className="relative z-10 mx-auto w-[160px] sm:w-[200px] md:mb-10 md:w-full md:max-w-[300px] lg:max-w-[380px]">
+          <div className="absolute -inset-8 rounded-full bg-[radial-gradient(ellipse,rgba(45,212,191,0.18),transparent_70%)] blur-2xl" aria-hidden />
           <div className="absolute -inset-4 z-0" aria-hidden>
             <Suspense fallback={null}>
               <HeroScene />
             </Suspense>
           </div>
+          {/* 3D avatar placeholder: drop a .glb here to replace the static portrait */}
           <div
             role="img"
             aria-label="Portrait of Abraham Gebeyehu"
@@ -120,8 +122,7 @@ export function Hero({ ready }: { ready: boolean }) {
           >
             <img
               src="/avatar.png"
-              alt=""
-              aria-hidden="true"
+              alt="Portrait of Abraham Gebeyehu"
               width="700"
               height="700"
               fetchPriority="high"

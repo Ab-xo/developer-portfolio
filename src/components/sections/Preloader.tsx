@@ -3,18 +3,17 @@ import { gsap } from '../../lib/gsap'
 import { site } from '../../data/site'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 
-// The one orchestrated opening moment: a HUD boot sequence.
-// Counter 00 → 100 with an amber progress line, then the whole panel wipes up
-// to reveal the hero. Calls onDone when finished so the hero can time its own
-// entrance. Under reduced motion it resolves near-instantly.
+// Preloader: name reveals letter by letter, a progress line fills, then a
+// clip-path wipe clears the panel to reveal the hero. Under 1.5s total.
 export function Preloader({ onDone }: { onDone: () => void }) {
   const rootRef = useRef<HTMLDivElement>(null)
   const barRef = useRef<HTMLSpanElement>(null)
+  const nameRef = useRef<HTMLHeadingElement>(null)
   const [count, setCount] = useState(0)
   const reduced = useReducedMotion()
+  const letters = site.fullName.split('')
 
   useEffect(() => {
-    // Lock scroll while the preloader is up.
     document.documentElement.style.overflow = 'hidden'
 
     const finish = () => {
@@ -31,17 +30,26 @@ export function Preloader({ onDone }: { onDone: () => void }) {
     const counter = { v: 0 }
     const tl = gsap.timeline()
 
-    tl.to(counter, {
-      v: 100,
-      duration: 1.6,
-      ease: 'power2.inOut',
-      onUpdate: () => setCount(Math.round(counter.v)),
-    })
-      .to(barRef.current, { scaleX: 1, duration: 1.6, ease: 'power2.inOut' }, 0)
-      // Brief hold, then wipe the panel up.
+    tl.to(barRef.current, { scaleX: 1, duration: 1.2, ease: 'power2.inOut' }, 0)
+      .to(
+        counter,
+        { v: 100, duration: 1.2, ease: 'power2.inOut', onUpdate: () => setCount(Math.round(counter.v)) },
+        0,
+      )
+      .from(
+        '[data-preloader-letter]',
+        {
+          yPercent: 120,
+          opacity: 0,
+          duration: 0.5,
+          ease: 'expo.out',
+          stagger: 0.04,
+        },
+        0.1,
+      )
       .to(rootRef.current, {
-        yPercent: -100,
-        duration: 1,
+        clipPath: 'inset(0 0 100% 0)',
+        duration: 0.9,
         ease: 'expo.inOut',
         delay: 0.15,
         onComplete: finish,
@@ -56,7 +64,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-[90] flex flex-col justify-between bg-bg px-6 py-8 md:px-10 md:py-10"
+      className="clip-wipe-up fixed inset-0 z-[90] flex flex-col justify-between bg-bg px-6 py-8 md:px-10 md:py-10"
       role="status"
       aria-label="Loading"
     >
@@ -65,8 +73,27 @@ export function Preloader({ onDone }: { onDone: () => void }) {
         <span className="mono-label uppercase">{site.location}</span>
       </div>
 
+      <div className="flex flex-col items-center justify-center gap-8">
+        <h1
+          ref={nameRef}
+          className="flex flex-wrap justify-center gap-x-1 font-display text-[clamp(2rem,8vw,4rem)] font-medium leading-none tracking-tight"
+          aria-label={site.fullName}
+        >
+          {letters.map((char, i) => (
+            <span key={i} className="reveal-mask">
+              <span data-preloader-letter className={`inline-block ${char === ' ' ? 'w-3' : ''}`}>
+                {char === ' ' ? '\u00A0' : char}
+              </span>
+            </span>
+          ))}
+        </h1>
+        <span className="mono-label uppercase text-accent">{site.title}</span>
+      </div>
+
       <div className="flex items-end justify-between">
-        <span className="mono-label uppercase">Portfolio <span className="px-2 text-faint">/</span> Initializing</span>
+        <span className="mono-label uppercase">
+          Portfolio <span className="px-2 text-faint">/</span> Initializing
+        </span>
         <span className="font-mono text-2xl tabular-nums text-accent md:text-4xl">
           {String(count).padStart(3, '0')}
         </span>

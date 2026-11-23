@@ -23,14 +23,14 @@ export const capabilities = {
       area: 'APIs & databases',
       summary:
         'Design and integrate APIs, authentication, and database-backed services with clear interfaces and practical documentation.',
-      stack: ['REST', 'FastAPI', 'OpenAPI / Swagger', 'Postman', 'MongoDB', 'MySQL', 'JWT / OAuth'],
+      stack: ['REST', 'FastAPI', 'OpenAPI / Swagger', 'Postman', 'MongoDB', 'MySQL', 'PostgreSQL', 'Supabase', 'JWT / OAuth'],
     },
     {
       index: '03',
       area: 'AI & data',
       summary:
         'Applied ML for forecasting, computer vision, and AI-assisted workflows, supported by data preparation and evaluation.',
-      stack: ['PyTorch', 'scikit-learn', 'pandas', 'NumPy', 'SciPy', 'Statsmodels', 'RAG', 'LLM integration', 'Computer vision'],
+      stack: ['PyTorch', 'scikit-learn', 'pandas', 'NumPy', 'SciPy', 'Statsmodels', 'LightGBM', 'RAG', 'LLM integration', 'Computer vision'],
     },
     {
       index: '04',

@@ -3,6 +3,11 @@ import * as THREE from 'three'
 import { ScrollTrigger } from '../../lib/gsap'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 
+// Lightweight 3D hero element: a noise-distorted wireframe sphere with a
+// particle field, mouse-parallax tilt, and scroll-away. Falls back to this
+// when no .glb avatar is loaded. To use a .glb instead, replace this component
+// with a useGLTF loader — the placeholder slot is /public/avatar.glb.
+
 const NOISE = `
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
@@ -74,8 +79,8 @@ varying float vDistort;
 void main() {
   float fresnel = pow(1.0 - max(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0), 2.0);
   vec3 color = mix(uColorA, uColorB, smoothstep(-1.0, 1.0, vDistort));
-  color += fresnel * uColorB * 1.4;
-  float alpha = fresnel * 0.45 + 0.05;
+  color += fresnel * uColorB * 1.2;
+  float alpha = fresnel * 0.4 + 0.04;
   gl_FragColor = vec4(color, alpha);
 }
 `
@@ -99,7 +104,7 @@ export function HeroScene() {
     renderer.domElement.style.display = 'block'
     container.appendChild(renderer.domElement)
 
-    const accent = new THREE.Color('#53e0c2')
+    const accent = new THREE.Color('#2dd4bf')
     const coral = new THREE.Color('#e6a77a')
 
     const geometry = new THREE.IcosahedronGeometry(1.5, 4)
@@ -108,7 +113,7 @@ export function HeroScene() {
       fragmentShader: FRAG,
       uniforms: {
         uTime: { value: 0 },
-        uDistort: { value: 0.18 },
+        uDistort: { value: 0.16 },
         uColorA: { value: accent },
         uColorB: { value: coral },
       },
@@ -124,12 +129,12 @@ export function HeroScene() {
       color: accent,
       wireframe: true,
       transparent: true,
-      opacity: 0.05,
+      opacity: 0.04,
     })
     const wireMesh = new THREE.Mesh(geometry, wireMat)
     scene.add(wireMesh)
 
-    const COUNT = 350
+    const COUNT = 300
     const positions = new Float32Array(COUNT * 3)
     for (let i = 0; i < COUNT; i++) {
       const r = 2.5 + Math.random() * 3.5
@@ -143,9 +148,9 @@ export function HeroScene() {
     pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
     const pMat = new THREE.PointsMaterial({
       color: accent,
-      size: 0.028,
+      size: 0.025,
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.3,
       sizeAttenuation: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
@@ -166,8 +171,8 @@ export function HeroScene() {
 
     const target = { x: 0, y: 0 }
     const onMove = (e: MouseEvent) => {
-      target.x = (e.clientX / window.innerWidth - 0.5) * 0.6
-      target.y = (e.clientY / window.innerHeight - 0.5) * 0.4
+      target.x = (e.clientX / window.innerWidth - 0.5) * 0.5
+      target.y = (e.clientY / window.innerHeight - 0.5) * 0.35
     }
     window.addEventListener('mousemove', onMove)
 
@@ -195,9 +200,9 @@ export function HeroScene() {
       }
 
       material.uniforms.uTime.value = t
-      material.uniforms.uDistort.value = 0.18 + scroll * 0.3
+      material.uniforms.uDistort.value = 0.16 + scroll * 0.25
 
-      mesh.rotation.y += 0.0025
+      mesh.rotation.y += 0.002
       wireMesh.rotation.copy(mesh.rotation)
 
       cx += (target.y - cx) * 0.04
@@ -205,12 +210,12 @@ export function HeroScene() {
       mesh.rotation.x = cx
       wireMesh.rotation.x = cx
 
-      const s = 1 - scroll * 0.35
+      const s = 1 - scroll * 0.3
       mesh.scale.setScalar(s)
       wireMesh.scale.setScalar(s)
 
-      particles.rotation.y = t * 0.025
-      particles.rotation.x = t * 0.015
+      particles.rotation.y = t * 0.02
+      particles.rotation.x = t * 0.012
 
       renderer.render(scene, camera)
     }

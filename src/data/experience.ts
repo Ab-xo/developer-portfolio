@@ -36,5 +36,13 @@ export const journey = {
       detail:
         'Advanced training in data and AI engineering, including supervised learning, time-series forecasting, deep learning, LLMs, retrieval-augmented generation, and agentic AI.',
     },
+    {
+      index: '04',
+      period: '2026',
+      title: 'Qiyas Hackathon — Top 3',
+      org: 'Addis Ababa, Ethiopia',
+      detail:
+        'Led the team that placed Top 3 with Addis Ride, a demand-forecasting tool for ride-hailing across Addis Ababa.',
+    },
   ] satisfies Milestone[],
 }
