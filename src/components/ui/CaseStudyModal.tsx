@@ -43,7 +43,7 @@ export function CaseStudyModal({ project, onClose }: Props) {
         '-=0.15',
       )
 
-    return () => tl.kill()
+    return () => { tl.kill() }
   }, [])
 
   return (

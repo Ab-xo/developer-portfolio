@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { gsap, SplitText, ScrollTrigger } from '../../lib/gsap'
+import { gsap, SplitText } from '../../lib/gsap'
 import { useIsomorphicLayoutEffect } from '../../hooks/useIsomorphicLayoutEffect'
 import { about } from '../../data/site'
 import { SectionHeader } from '../ui/SectionHeader'

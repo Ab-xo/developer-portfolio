@@ -9,18 +9,15 @@ import { Preloader } from './components/sections/Preloader'
 import { Hero } from './components/sections/Hero'
 import { Intro } from './components/sections/Intro'
 import { SelectedWork } from './components/sections/SelectedWork'
-import { FeaturedCase } from './components/sections/FeaturedCase'
-import { SiraMapCase } from './components/sections/SiraMapCase'
-import { EngineeringProof } from './components/sections/EngineeringProof'
-import { Capabilities } from './components/sections/Capabilities'
+import { Skills } from './components/sections/Skills'
 import { Experience } from './components/sections/Experience'
-import { AiEngineering } from './components/sections/AiEngineering'
 import { About } from './components/sections/About'
 import { Contact } from './components/sections/Contact'
 
 export function App() {
   const [ready, setReady] = useState(false)
   useLenis()
+
   useEffect(() => {
     if (!ready) return
 
@@ -80,24 +77,6 @@ export function App() {
             },
           )
         })
-
-        gsap.utils.toArray<HTMLElement>('[data-count]').forEach((el) => {
-          const text = el.textContent ?? ''
-          const match = text.match(/[\d.]+/)
-          if (!match) return
-          const target = parseFloat(match[0])
-          const suffix = text.slice(match.index! + match[0].length)
-          const prefix = text.slice(0, match.index)
-          const obj = { v: 0 }
-          gsap.to(obj, {
-            v: target,
-            duration: 1.6,
-            ease: 'power2.out',
-            snap: { v: target % 1 !== 0 ? 0.01 : 1 },
-            onUpdate: () => { el.textContent = prefix + String(obj.v) + suffix },
-            scrollTrigger: { trigger: el, start: 'top 85%', once: true },
-          })
-        })
       })
       return () => context.revert()
     })
@@ -108,5 +87,31 @@ export function App() {
       motion.revert()
     }
   }, [ready])
-  return <><a href="#top" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[110] focus:rounded-full focus:bg-accent focus:px-5 focus:py-2 focus:text-sm focus:text-bg">Skip to content</a><div className="film-grain" aria-hidden /><div className="vignette" aria-hidden /><ScrollProgress /><Cursor /><Preloader onDone={() => setReady(true)} /><Nav /><main id="main"><Hero ready={ready} /><Intro /><SelectedWork /><FeaturedCase /><SiraMapCase /><EngineeringProof /><Capabilities /><Experience /><AiEngineering /><About /><Contact /></main><Footer /></>
+
+  return (
+    <>
+      <a
+        href="#top"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[110] focus:rounded-full focus:bg-accent focus:px-5 focus:py-2 focus:text-sm focus:text-bg"
+      >
+        Skip to content
+      </a>
+      <div className="film-grain" aria-hidden />
+      <div className="vignette" aria-hidden />
+      <ScrollProgress />
+      <Cursor />
+      <Preloader onDone={() => setReady(true)} />
+      <Nav />
+      <main id="main">
+        <Hero ready={ready} />
+        <Intro />
+        <SelectedWork />
+        <Skills />
+        <Experience />
+        <About />
+        <Contact />
+      </main>
+      <Footer />
+    </>
+  )
 }
