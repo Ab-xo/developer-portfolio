@@ -7,8 +7,9 @@ import { ProjectCard } from '../ui/ProjectCard'
 import { CaseStudyModal } from '../ui/CaseStudyModal'
 import { useTiltGroup } from '../../hooks/useTilt'
 
-// Featured Projects: horizontal scroll on desktop, stacked cards on mobile.
-// Each card has spotlight glow, hover tilt, and opens a case-study modal.
+// Featured Projects: horizontal scroll (pinned) on desktop, stacked vertical
+// cards on mobile. Each card has spotlight glow, hover tilt, and opens a
+// case-study modal.
 export function SelectedWork() {
   const rootRef = useRef<HTMLElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -22,7 +23,7 @@ export function SelectedWork() {
 
     const mm = gsap.matchMedia()
 
-    // Desktop: horizontal scroll pin
+    // Desktop: pin the section and translate the track horizontally.
     mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
       const ctx = gsap.context(() => {
         const totalScroll = track.scrollWidth - window.innerWidth + 80
@@ -34,12 +35,7 @@ export function SelectedWork() {
           scrub: 0.8,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
-            gsap.to(track, {
-              x: -totalScroll * self.progress,
-              duration: 0.1,
-              ease: 'none',
-              overwrite: true,
-            })
+            gsap.set(track, { x: -totalScroll * self.progress })
           },
         })
         return () => st.kill()
@@ -67,17 +63,17 @@ export function SelectedWork() {
         </span>
       </div>
 
-      {/* Horizontal track */}
-      <div className="mt-12 overflow-hidden md:py-8">
+      {/* Mobile: vertical stack / Desktop: horizontal track */}
+      <div className="mt-10 md:mt-12 md:overflow-hidden md:py-8">
         <div
           ref={trackRef}
-          className="flex gap-5 px-6 pb-8 md:gap-6 md:px-10"
+          className="flex flex-col gap-6 px-6 pb-8 md:flex-row md:items-stretch md:gap-6 md:px-10 md:pb-0"
         >
           {projects.map((p) => (
             <ProjectCard key={p.id} project={p} onOpen={setActive} />
           ))}
-          {/* End spacer card */}
-          <div className="flex w-[85vw] max-w-[440px] flex-shrink-0 items-center justify-center sm:w-[400px]">
+          {/* End spacer card (desktop horizontal track only) */}
+          <div className="hidden md:flex w-[420px] flex-shrink-0 items-center justify-center">
             <div className="text-center">
               <p className="mono-label uppercase text-accent">More on GitHub</p>
               <a
